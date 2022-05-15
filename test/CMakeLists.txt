@@ -3,7 +3,7 @@ catkin_add_gtest(${PROJECT_NAME}-utest
           test/utest.cpp
           WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 if(TARGET ${PROJECT_NAME}-utest)
-  target_link_libraries(${PROJECT_NAME}-utest rospack)
+  target_link_libraries(${PROJECT_NAME}-utest rospack pthread)
 endif()
 
 # Prepare to run the tests.  This could be cleaner.
