@@ -72,13 +72,13 @@ TEST(rospack, reentrant)
   output = rp.getOutput();
   boost::trim(output);
   boost::split(output_list, output, boost::is_any_of("\n"));
-  ASSERT_EQ((int)output_list.size(), 4);
+  ASSERT_EQ((int)output_list.size(), 7);
   ret = rp.run(std::string("list"));
   ASSERT_EQ(ret, 0);
   output = rp.getOutput();
   boost::trim(output);
   boost::split(output_list, output, boost::is_any_of("\n"));
-  ASSERT_EQ((int)output_list.size(), 4);
+  ASSERT_EQ((int)output_list.size(), 7);
   std::vector<std::string> path_name;
   boost::split(path_name, output_list[0], boost::is_any_of(" "));
   ASSERT_EQ((int)path_name.size(), 2);
@@ -98,13 +98,13 @@ TEST(rospack, multiple_rospack_objects)
   output = rp.getOutput();
   boost::trim(output);
   boost::split(output_list, output, boost::is_any_of("\n"));
-  ASSERT_EQ((int)output_list.size(), 4);
+  ASSERT_EQ((int)output_list.size(), 7);
   ret = rp.run(std::string("list"));
   ASSERT_EQ(ret, 0);
   output = rp.getOutput();
   boost::trim(output);
   boost::split(output_list, output, boost::is_any_of("\n"));
-  ASSERT_EQ((int)output_list.size(), 4);
+  ASSERT_EQ((int)output_list.size(), 7);
   std::vector<std::string> path_name;
   boost::split(path_name, output_list[0], boost::is_any_of(" "));
   ASSERT_EQ((int)path_name.size(), 2);
@@ -120,13 +120,13 @@ TEST(rospack, multiple_rospack_objects)
   output = rp2.getOutput();
   boost::trim(output);
   boost::split(output_list, output, boost::is_any_of("\n"));
-  ASSERT_EQ((int)output_list.size(), 4);
+  ASSERT_EQ((int)output_list.size(), 7);
   ret = rp2.run(std::string("list"));
   ASSERT_EQ(ret, 0);
   output = rp2.getOutput();
   boost::trim(output);
   boost::split(output_list, output, boost::is_any_of("\n"));
-  ASSERT_EQ((int)output_list.size(), 4);
+  ASSERT_EQ((int)output_list.size(), 7);
   path_name.clear();
   boost::split(path_name, output_list[0], boost::is_any_of(" "));
   ASSERT_EQ((int)path_name.size(), 2);
@@ -153,6 +153,9 @@ TEST(rospack, env_change)
   std::string rr = std::string(getcwd(buf, sizeof(buf))) + "/test2";
   setenv("ROS_PACKAGE_PATH", rr.c_str(), 1);
   std::vector<std::string> test_pkgs;
+  test_pkgs.push_back("catkin");
+  test_pkgs.push_back("cmake_modules");
+  test_pkgs.push_back("ros_environment");
   test_pkgs.push_back("precedence1");
   test_pkgs.push_back("precedence2");
   test_pkgs.push_back("precedence3");
@@ -189,9 +192,13 @@ TEST(rospack, env_change)
   rr = std::string(getcwd(buf, sizeof(buf))) + "/test3";
   setenv("ROS_PACKAGE_PATH", rr.c_str(), 1);
   test_pkgs.clear();
+  test_pkgs.push_back("catkin");
+  test_pkgs.push_back("cmake_modules");
+  test_pkgs.push_back("ros_environment");
   test_pkgs.push_back("precedence1");
   test_pkgs.push_back("precedence2");
   test_pkgs.push_back("precedence3");
+  test_pkgs.push_back("roslang");
   ret = rp.run(std::string("list-names"));
   EXPECT_EQ(ret, 0);
   output_list.clear();
@@ -226,7 +233,7 @@ TEST(rospack, env_change)
   EXPECT_EQ(ret, 0);
   output = rp.getOutput();
   boost::trim(output);
-  EXPECT_EQ(output, std::string());
+  EXPECT_EQ(output, "catkin\ncmake_modules\nros_environment\nroslang");
 
   // Reset old path, for other tests
   setenv("ROS_PACKAGE_PATH", oldrpp, 1);
