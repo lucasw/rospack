@@ -1722,10 +1722,16 @@ Rosstackage::isSysPackage(const std::string& pkgname)
     Py_DECREF(pName);
     if(!pModule)
     {
-      PyErr_Print();
       PyGILState_Release(gstate);
       std::string errmsg = "could not find python module 'rosdep2.rospack'. is rosdep up-to-date (at least 0.10.4)?";
-      throw Exception(errmsg);
+
+      static bool rosdep_warning = false;
+      if(!rosdep_warning) {
+        fprintf(stderr, "could not find python module 'rosdep2.rospack', continuing without it\n");
+        rosdep_warning = true;
+      }
+      cache[pkgname] = true;
+      return true;
     }
     pDict = PyModule_GetDict(pModule);
   }
@@ -1771,7 +1777,14 @@ Rosstackage::isSysPackage(const std::string& pkgname)
       PyErr_Print();
       PyGILState_Release(gstate);
       std::string errmsg = "the rosdep view is empty: call 'sudo rosdep init' and 'rosdep update'";
-      throw Exception(errmsg);
+
+      static bool rosdep_cache_warning = false;
+      if(!rosdep_cache_warning) {
+        fprintf(stderr, "could not find rosdep cache, continuing without it\n");
+        rosdep_cache_warning = true;
+      }
+      cache[pkgname] = true;
+      return true;
     }
     rospack_view_not_empty = true;
   }
