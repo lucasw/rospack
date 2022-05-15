@@ -284,6 +284,9 @@ bool
 Rosstackage::getSearchPathFromEnv(std::vector<std::string>& sp)
 {
   char* rpp = getenv("ROS_PACKAGE_PATH");
+
+  sp.push_back("/usr/share/");
+
   if(rpp)
   {
     // I can't see that boost filesystem has an elegant cross platform
