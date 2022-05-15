@@ -31,6 +31,7 @@
 #include "tinyxml2.h"
 
 #include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/functional/hash.hpp>
 #include <stdexcept>
@@ -1543,7 +1544,7 @@ Rosstackage::crawlDetail(const std::string& path,
         std::string name = dit->path().filename().string();
 #endif
         // Ignore directories starting with '.'
-        if(name.size() == 0 || name[0] == '.')
+        if(name.size() == 0 || name[0] == '.' || (boost::starts_with(dit->path().string(), "/usr/share") && depth > 1))
           continue;
 
         crawlDetail(dit->path().string(), force, depth+1,
