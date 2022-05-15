@@ -286,8 +286,6 @@ Rosstackage::getSearchPathFromEnv(std::vector<std::string>& sp)
 {
   char* rpp = getenv("ROS_PACKAGE_PATH");
 
-  sp.push_back("/usr/share/");
-
   if(rpp)
   {
     // I can't see that boost filesystem has an elegant cross platform
@@ -309,6 +307,10 @@ Rosstackage::getSearchPathFromEnv(std::vector<std::string>& sp)
       sp.push_back(*it);
     }
   }
+
+  // search this default location last, overlay directories in ROS_PACKAGE_PATH have the priority
+  sp.push_back("/usr/share/");
+
   return true;
 }
 
