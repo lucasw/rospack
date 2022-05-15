@@ -35,6 +35,7 @@ add_library(rospack
   src/utils.cpp
 )
 target_link_libraries(rospack ${TinyXML2_LIBRARIES} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+set_target_properties(rospack PROPERTIES VERSION ${rospack_VERSION} SOVERSION "0d")
 
 add_executable(rospackexe src/rospack_main.cpp)
 # Set the name, and make it a "global" executable
